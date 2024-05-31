@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.ant-btn {
+  background-color: #1d9672;
+  font-weight: 600;
+  border-radius: 200px;
+  height: 38px;
+}
+
+.ant-btn:hover {
+  background: #16c48f !important;
+}
+
+.ant-btn:active {
+  background-color: rgb(32, 96, 77) !important;
+}
