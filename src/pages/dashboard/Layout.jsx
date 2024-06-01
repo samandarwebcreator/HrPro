@@ -47,9 +47,9 @@ export default function LayoutStructure() {
         <h2 className="text-2xl font-bold">Content</h2>
       </main>
 
-      {/* <footer className="col-start-2 bg-gray-700 text-white p-4">
+      <footer className="col-start-2 bg-gray-700 text-white p-4">
         <h2 className="text-xl font-bold">Footer</h2>
-      </footer> */}
+      </footer>
     </div>
   );
 }
