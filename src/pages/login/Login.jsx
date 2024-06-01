@@ -2,12 +2,25 @@ import React, { useState } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import loginBackground from "../../assets/loginBg.jpg";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const arrayLogin = {
     login: "admin",
     password: "admin",
   };
+
+  const notify = () =>
+    toast.error("Incorrect password or login!", {
+      toastStyle: {
+        backgroundColor: "#ff6347",
+        color: "#fff",
+        fontWeight: "bold",
+      },
+      bodyClassName: "text-lg",
+    });
+
   const navigate = useNavigate();
   const [loginValue, setLoginValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
@@ -19,7 +32,9 @@ export default function Login() {
       localStorage.setItem("auth", JSON.stringify("true"));
       setLoginValue("");
       setPasswordValue("");
-      navigate("/dashboard");
+      navigate("/dashboard/home");
+    } else {
+      notify();
     }
   };
 
@@ -73,11 +88,15 @@ export default function Login() {
             rules={[
               {
                 required: true,
-                message: "Please input your login!",
+                message: "Please type your login!",
               },
             ]}
           >
-            <Input value={loginValue} onChange={handleLoginChange} />
+            <Input
+              value={loginValue}
+              onChange={handleLoginChange}
+              className="bg-transparent text-gray-950 font-semibold focus:bg-transparent hover:bg-transparent border-gray-900"
+            />
           </Form.Item>
 
           <Form.Item
@@ -87,13 +106,14 @@ export default function Login() {
             rules={[
               {
                 required: true,
-                message: "Please input your password!",
+                message: "Please tyoe your password!",
               },
             ]}
           >
             <Input.Password
               value={passwordValue}
               onChange={handlePasswordChange}
+              className="bg-transparent text-gray-950 font-semibold focus:bg-transparent hover:bg-transparent border-gray-900"
             />
           </Form.Item>
 
@@ -127,6 +147,7 @@ export default function Login() {
           </Form.Item>
         </Form>
       </div>
+      <ToastContainer />
     </div>
   );
 }
