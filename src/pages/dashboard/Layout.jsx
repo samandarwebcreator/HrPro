@@ -28,7 +28,7 @@ export default function LayoutStructure() {
   }, []);
 
   return (
-    <div>
+    <div className="relative w-full">
       <header className="col-span-full min-h-[10vh] bg-layoutColor text-white py-3 px-2 md:px-3 md:py-4 lg:p-4  flex items-center gap-4 rounded-br-lg">
         <h1 className="text-3xl font-bold">Header</h1>
         <button
@@ -39,19 +39,30 @@ export default function LayoutStructure() {
         </button>
       </header>
       <div
-        className={`grid grid-cols-[${
+        className={`md:grid w-full  grid-cols-[${
           openedSidebar ? "auto,2fr" : "auto,1fr"
-        }] grid-rows-[auto,1fr,auto] min-h-[90vh]`}
+        }] grid-rows-[auto,1fr,auto] min-h-[90vh] `}
         style={{ transition: "grid-template-columns 0.5s" }}
       >
-        <aside
-          className={`row-span-3 bg-layoutColor text-white p-4 ${
-            openedSidebar ? "w-64" : "w-20"
+        <div
+          className={`flex w-full absolute md:static top-0  ${
+            isWideSidebar ? "left-0" : "-left-[100%]"
           }`}
-          style={{ transition: "width 0.5s" }}
         >
-          <Menu />
-        </aside>
+          <aside
+            className={`row-span-3 min-h-screen w-[75%] bg-layoutColor text-white p-4 ${
+              openedSidebar ? "md:w-64" : "md:w-20"
+            }`}
+            style={{ transition: "width 0.5s" }}
+          >
+            <Menu />
+          </aside>
+          <div
+            className={`bg-navbarHover w-[25%] min-h-screen ${
+              isWideSidebar ? "block" : "hidden"
+            } block md:hidden`}
+          ></div>
+        </div>
 
         <main className="col-start-2 p-4">
           <h2 className="text-2xl font-bold">Content</h2>
