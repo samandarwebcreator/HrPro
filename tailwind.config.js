@@ -16,7 +16,7 @@ export default {
         buttonBrand: "#238636",
         glassBg: "rgba(255, 255, 255, 0.9)",
         layoutColor: "#001529",
-        navbarHover: "rgba(0, 0, 0, 0.1)",
+        navbarHover: "rgba(0, 0, 0, 0.3)",
       },
       boxShadow: {
         navbarShadow: "0 4px 30px rgba(0, 0, 0, 0.9)",

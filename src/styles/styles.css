@@ -16,3 +16,7 @@
 .ant-btn:active {
   background-color: rgb(32, 96, 77) !important;
 }
+
+body::-webkit-scrollbar {
+  width: 0px;
+}

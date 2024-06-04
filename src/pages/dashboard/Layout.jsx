@@ -45,15 +45,12 @@ export default function LayoutStructure() {
         }}
       >
         <div
-          className={`flex w-full absolute lg:static top-0  ${
-            openedSidebar ? "left-0" : "-left-full"
+          className={`flex w-full absolute lg:static top-0 transition-all duration-1000 ease-in-out  ${
+            openedSidebar ? "left-0 z-50" : "-left-full -z-50"
           }`}
-          style={{
-            transition: "left 0.5s",
-          }}
         >
           <aside
-            className={`row-span-3 min-h-screen w-[75%] md:w-[35%] bg-layoutColor text-white p-4 ${
+            className={`row-span-3 min-h-[90vh] w-[75%] md:w-[35%] bg-layoutColor text-white p-4 transition-all duration-1000 ease-in-out ${
               openedSidebar ? "lg:w-64" : "lg:w-20"
             }`}
             style={{
@@ -64,11 +61,10 @@ export default function LayoutStructure() {
           </aside>
           <div
             onClick={() => dispatch(wideSidebar(false))}
-            className={`${
-              openedSidebar ? "bg-navbarHover" : ""
-            } w-[25%] md:w-[65%] min-h-screen ${
-              openedSidebar ? "block" : "hidden"
-            } block lg:hidden`}
+            className={` bg-transparent 
+           w-[25%] md:w-[65%] min-h-screen ${
+             openedSidebar ? "block" : "hidden"
+           } block lg:hidden`}
           ></div>
         </div>
 
