@@ -19,7 +19,7 @@ export default {
         navbarHover: "rgba(0, 0, 0, 0.1)",
       },
       boxShadow: {
-        navbarShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        navbarShadow: "0 4px 30px rgba(0, 0, 0, 0.9)",
       },
     },
   },

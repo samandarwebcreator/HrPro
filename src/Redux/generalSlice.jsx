@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const generalSlice = createSlice({
   name: "general",
   initialState: {
-    sidebarOpen: true,
+    sidebarOpen: window.innerWidth < 1100 ? false : true,
   },
   reducers: {
     wideSidebar: (state, action) => {
