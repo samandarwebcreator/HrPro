@@ -17,6 +17,7 @@ export default {
         glassBg: "rgba(255, 255, 255, 0.9)",
         layoutColor: "#001529",
         navbarHover: "rgba(0, 0, 0, 0.3)",
+        greenActiveWorks: "#028A0F",
       },
       boxShadow: {
         navbarShadow: "0 4px 30px rgba(0, 0, 0, 0.9)",

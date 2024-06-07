@@ -4,6 +4,7 @@ import { FaBars } from "react-icons/fa6";
 import Menu from "./components/Menu";
 import { useDispatch, useSelector } from "react-redux";
 import { wideSidebar } from "../../Redux/generalSlice";
+import HomeAssets from "./components/HomeAssets";
 
 export default function LayoutStructure() {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ export default function LayoutStructure() {
       <div
         className={`md:grid w-full  grid-cols-[${
           openedSidebar ? "auto,2fr" : "auto,1fr"
-        }] grid-rows-[auto,1fr,auto] min-h-[90vh] `}
+        }] grid-rows-[10fr,2fr] min-h-[90vh] `}
         style={{
           transition: "grid-template-columns 0.5s",
         }}
@@ -69,7 +70,7 @@ export default function LayoutStructure() {
         </div>
 
         <main className="col-start-2 p-4">
-          <h2 className="text-2xl font-bold">Content</h2>
+          <HomeAssets />
         </main>
       </div>
     </div>
