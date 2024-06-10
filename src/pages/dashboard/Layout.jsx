@@ -1,5 +1,4 @@
-import { Button } from "antd";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { FaBars } from "react-icons/fa6";
 import Menu from "./components/Menu";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,55 +23,45 @@ export default function LayoutStructure() {
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="relative w-full">
-      <header className="col-span-full min-h-[10vh] bg-layoutColor text-white py-3 px-2 md:px-3 md:py-4 lg:p-4  flex items-center gap-4">
+      <header className="min-h-[10vh] bg-layoutColor text-white py-3 px-2 md:px-3 md:py-4 lg:p-4 flex items-center gap-4">
         <h1 className="text-3xl font-bold">Header</h1>
         <button
-          className={`p-1.5 text-xl rounded-md text-layoutColor font-extrabold   m-0 bg-white`}
+          className="p-1.5 text-xl rounded-md text-layoutColor font-extrabold bg-white"
           onClick={toggleSidebarWidth}
         >
           <FaBars />
         </button>
       </header>
-      <div
-        className={`md:grid w-full  grid-cols-[${
-          openedSidebar ? "auto,2fr" : "auto,1fr"
-        }] grid-rows-[10fr,2fr] min-h-[90vh] `}
-        style={{
-          transition: "grid-template-columns 0.5s",
-        }}
-      >
+      <div className="flex">
         <div
-          className={`flex w-full absolute lg:static top-0 transition-all duration-1000 ease-in-out  ${
-            openedSidebar ? "left-0 z-50" : "-left-full -z-50"
-          }`}
+          className={`transition-all duration-500 ease-in-out transform ${
+            openedSidebar
+              ? "translate-x-0 lg:w-72"
+              : "-translate-x-full lg:translate-x-0 lg:w-[80px]"
+          } bg-layoutColor text-white fixed lg:static top-0 h-full z-50 lg:z-auto w-72`}
         >
-          <aside
-            className={`row-span-3 min-h-[90vh] w-[75%] md:w-[35%] bg-layoutColor text-white p-4 transition-all duration-1000 ease-in-out ${
-              openedSidebar ? "lg:w-64" : "lg:w-20"
-            }`}
-            style={{
-              transition: "width 0.5s",
-            }}
-          >
+          <aside className="min-h-[90vh] px-4 mt-2">
             <Menu />
           </aside>
-          <div
-            onClick={() => dispatch(wideSidebar(false))}
-            className={` bg-transparent 
-           w-[25%] md:w-[65%] min-h-screen ${
-             openedSidebar ? "block" : "hidden"
-           } block lg:hidden`}
-          ></div>
         </div>
-
-        <main className="col-start-2 p-4">
+        <main
+          className={`flex-1 p-4 transition-all duration-500 ease-in-out ${
+            openedSidebar ? "lg:ml-102" : "lg:ml-[80px]"
+          }`}
+        >
           <HomeAssets />
         </main>
       </div>
+      <div
+        onClick={() => dispatch(wideSidebar(false))}
+        className={`fixed inset-0  bg-black opacity-50 ${
+          openedSidebar ? "block" : "hidden"
+        } lg:hidden`}
+      ></div>
     </div>
   );
 }
