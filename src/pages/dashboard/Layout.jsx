@@ -50,7 +50,7 @@ export default function LayoutStructure() {
         </div>
         <main
           className={`flex-1 p-4 transition-all duration-500 ease-in-out ${
-            openedSidebar ? "lg:ml-102" : "lg:ml-[80px]"
+            openedSidebar ? "lg:ml-102" : "lg:ml-[0px]"
           }`}
         >
           <HomeAssets />
