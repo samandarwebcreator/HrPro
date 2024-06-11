@@ -18,9 +18,11 @@ export default {
         layoutColor: "#001529",
         navbarHover: "rgba(0, 0, 0, 0.3)",
         greenActiveWorks: "#028A0F",
+        mainBg: "#DCE9F9",
       },
       boxShadow: {
         navbarShadow: "0 4px 30px rgba(0, 0, 0, 0.9)",
+        tableShadow: "0px 0px 4px 0px rgba(61,69,69,1)",
       },
     },
   },

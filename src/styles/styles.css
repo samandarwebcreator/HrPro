@@ -17,6 +17,7 @@
   background-color: rgb(32, 96, 77) !important;
 }
 
-body::-webkit-scrollbar {
+body::-webkit-scrollbar,
+.main_section::-webkit-scrollbar {
   width: 0px;
 }
