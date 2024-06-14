@@ -1,6 +1,7 @@
 import Search from "antd/es/transfer/search";
 import React from "react";
 import Table from "./components/Table";
+import TabApplicant from "./components/TabApplicant";
 
 export default function OrderAssets() {
   const onSearch = (value, _e, info) => console.log(info?.source, value);
@@ -13,7 +14,7 @@ export default function OrderAssets() {
         </div>
       </div>
       <div>
-        <Table />
+        <TabApplicant />
       </div>
     </div>
   );
