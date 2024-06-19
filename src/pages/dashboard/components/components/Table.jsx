@@ -89,7 +89,7 @@ const CustomTable = () => {
             rowSelection={rowSelection}
             columns={columns}
             dataSource={data}
-            rowKey="key" // Ensure each row has a unique key
+            rowKey="key"
           />
         )}
       </div>
