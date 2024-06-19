@@ -1,43 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { Button, Table as AntTable, Spin } from "antd";
+import React, { useState, useEffect, useCallback } from "react";
+import { Table as AntTable, Spin } from "antd";
 import { useMediaQuery } from "react-responsive";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 const CustomTable = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [fetching, setFetching] = useState(true);
+  const searchResult = useSelector((state) => state.orderReducer.searchResult);
 
   const isMdOrLarger = useMediaQuery({ minWidth: 768 });
 
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await fetch(
+        "https://666c1ab049dbc5d7145c9d50.mockapi.io/applicants/users"
+      );
+      const result = await response.json();
+      setData(result);
+      setFetching(false);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+      setFetching(false);
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "https://666c1ab049dbc5d7145c9d50.mockapi.io/applicants/users"
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => {
+    const filterData = () => {
+      if (searchResult) {
+        const filteredData = data.filter((item) =>
+          item.name.toLowerCase().includes(searchResult.toLowerCase())
         );
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      } finally {
-        setFetching(false);
+        setData(filteredData);
+      } else {
+        fetchData();
       }
     };
 
-    fetchData();
-  }, []);
-
-  const start = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
-  };
+    filterData();
+  }, [searchResult, data, fetchData]);
 
   const onSelectChange = (newSelectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -67,21 +76,20 @@ const CustomTable = () => {
       title: "Action",
       dataIndex: "button",
       render: (_, record) => (
-        <Button type="link" onClick={() => console.log("Action", record)}>
-          Action
-        </Button>
+        <button
+          className="py-1 px-2 border-2 rounded-lg "
+          type="link"
+          onClick={() => console.log("Action", record)}
+        >
+          <BsThreeDotsVertical />
+        </button>
       ),
     },
   ];
 
   return (
     <div>
-      <div
-        className="rounded-lg bg-white mt-4"
-        style={{
-          marginBottom: 16,
-        }}
-      >
+      <div className="rounded-lg bg-white mt-4">
         {fetching ? (
           <Spin />
         ) : (

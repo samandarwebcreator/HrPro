@@ -21,3 +21,8 @@ body::-webkit-scrollbar,
 .main_section::-webkit-scrollbar {
   width: 0px;
 }
+
+th.ant-table-cell:last-child,
+td.ant-table-cell:last-child {
+  text-align: center !important;
+}
