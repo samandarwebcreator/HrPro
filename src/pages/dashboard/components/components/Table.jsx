@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Table as AntTable, Spin } from "antd";
+import { Table as AntTable, Spin, Popover, Button } from "antd"; // Import Popover from antd
 import { useMediaQuery } from "react-responsive";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector } from "react-redux";
@@ -9,6 +9,8 @@ const CustomTable = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [fetching, setFetching] = useState(true);
+  const [popoverVisible, setPopoverVisible] = useState({}); // State for popover visibility
+  const [popoverContent, setPopoverContent] = useState({}); // State for popover content
   const searchResult = useSelector((state) => state.orderReducer.searchResult);
 
   const isMdOrLarger = useMediaQuery({ minWidth: 768 });
@@ -50,6 +52,31 @@ const CustomTable = () => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
+  const handleActionClick = (record) => {
+    setPopoverContent((prev) => ({
+      ...prev,
+      [record.key]: renderPopoverContent(record),
+    }));
+    setPopoverVisible((prev) => ({
+      ...prev,
+      [record.key]: true,
+    }));
+  };
+
+  const handlePopoverVisibleChange = (visible, record) => {
+    setPopoverVisible((prev) => ({
+      ...prev,
+      [record.key]: visible,
+    }));
+  };
+
+  const renderPopoverContent = (record) => (
+    <div>
+      <p>Name: {record.name}</p>
+      <p>Work: {record.work}</p>
+    </div>
+  );
+
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
@@ -70,19 +97,36 @@ const CustomTable = () => {
             title: "Action",
             dataIndex: "action",
           },
+          {
+            title: "Status",
+            dataIndex: "status",
+          },
         ]
       : []),
     {
       title: "Action",
       dataIndex: "button",
       render: (_, record) => (
-        <button
-          className="py-1 px-2 border-2 rounded-lg "
-          type="link"
-          onClick={() => console.log("Action", record)}
+        <Popover
+          content={popoverContent[record.key]}
+          title="Popover Title"
+          trigger="click"
+          open={popoverVisible[record.key]}
+          onOpenChange={(visible) =>
+            handlePopoverVisibleChange(visible, record)
+          }
         >
-          <BsThreeDotsVertical />
-        </button>
+          <button
+            className="py-1 px-2 border-2 rounded-lg "
+            type="link"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent table row selection when clicking popover button
+              handleActionClick(record);
+            }}
+          >
+            <BsThreeDotsVertical />
+          </button>
+        </Popover>
       ),
     },
   ];
