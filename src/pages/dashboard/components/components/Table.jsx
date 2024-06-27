@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Table as AntTable, Spin, Popover, Button } from "antd"; // Import Popover from antd
+import { Table as AntTable, Spin, Popover } from "antd";
 import { useMediaQuery } from "react-responsive";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import { FaUserEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { GrStatusCriticalSmall } from "react-icons/gr";
+import { MdInfo } from "react-icons/md";
 
 const CustomTable = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [fetching, setFetching] = useState(true);
-  const [popoverVisible, setPopoverVisible] = useState({}); // State for popover visibility
-  const [popoverContent, setPopoverContent] = useState({}); // State for popover content
+  const [popoverVisible, setPopoverVisible] = useState({});
+  const [secondaryPopoverVisible, setSecondaryPopoverVisible] = useState({});
+  const [popoverContent, setPopoverContent] = useState({});
   const searchResult = useSelector((state) => state.orderReducer.searchResult);
 
   const isMdOrLarger = useMediaQuery({ minWidth: 768 });
@@ -70,10 +75,73 @@ const CustomTable = () => {
     }));
   };
 
+  const handleSecondaryPopoverVisibleChange = (visible, record) => {
+    setSecondaryPopoverVisible((prev) => ({
+      ...prev,
+      [record.key]: visible,
+    }));
+  };
+
+  const popUpArray = [
+    {
+      id: 1,
+      name: "Tahrirlash",
+      icon: <FaUserEdit />,
+      color: "text-red-500",
+    },
+    {
+      id: 2,
+      name: `O'chirish`,
+      icon: <MdDelete />,
+      color: "text-yellow-500",
+    },
+    {
+      id: 3,
+      name: "Holati",
+      icon: <GrStatusCriticalSmall />,
+      color: "text-green-500",
+      hasSecondaryPopover: true,
+    },
+    {
+      id: 4,
+      name: "Ma'lumotlari",
+      icon: <MdInfo />,
+      color: "text-gray-600",
+    },
+  ];
+
   const renderPopoverContent = (record) => (
     <div>
-      <p>Name: {record.name}</p>
-      <p>Work: {record.work}</p>
+      {popUpArray.map((item) => (
+        <div
+          key={item.id}
+          className={`flex items-center ${item.color} px-2 py-1 hover:bg-popoverHover hover:cursor-pointer rounded-lg`}
+        >
+          {item.hasSecondaryPopover ? (
+            <Popover
+              content={<div>Secondary Popover Content</div>}
+              trigger="click"
+              open={secondaryPopoverVisible[record.key]}
+              onOpenChange={(visible) =>
+                handleSecondaryPopoverVisibleChange(visible, record)
+              }
+            >
+              <div
+                className="flex items-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {item.icon}
+                <span className="ml-2">{item.name}</span>
+              </div>
+            </Popover>
+          ) : (
+            <>
+              {item.icon}
+              <span className="ml-2">{item.name}</span>
+            </>
+          )}
+        </div>
+      ))}
     </div>
   );
 
@@ -109,7 +177,6 @@ const CustomTable = () => {
       render: (_, record) => (
         <Popover
           content={popoverContent[record.key]}
-          title="Popover Title"
           trigger="click"
           open={popoverVisible[record.key]}
           onOpenChange={(visible) =>
@@ -117,10 +184,10 @@ const CustomTable = () => {
           }
         >
           <button
-            className="py-1 px-2 border-2 rounded-lg "
+            className="py-1 px-2 border-2 rounded-lg"
             type="link"
             onClick={(e) => {
-              e.stopPropagation(); // Prevent table row selection when clicking popover button
+              e.stopPropagation();
               handleActionClick(record);
             }}
           >

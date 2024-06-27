@@ -17,6 +17,7 @@ export default {
         glassBg: "rgba(255, 255, 255, 0.9)",
         layoutColor: "#001529",
         navbarHover: "rgba(0, 0, 0, 0.3)",
+        popoverHover: "rgba(0, 0, 0, 0.1)",
         greenActiveWorks: "#028A0F",
         mainBg: "#DCE9F9",
       },
