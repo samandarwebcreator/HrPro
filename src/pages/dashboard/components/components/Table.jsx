@@ -3,15 +3,14 @@ import { Table as AntTable, Spin, Popover } from "antd";
 import { useMediaQuery } from "react-responsive";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useSelector } from "react-redux";
-import { FaUserEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import { GrStatusCriticalSmall } from "react-icons/gr";
-import { MdInfo } from "react-icons/md";
+import { popUpArray } from "../../../../lib/data";
 
-const CustomTable = () => {
+const CustomTable = ({ status }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+
+  console.log(data);
   const [fetching, setFetching] = useState(true);
   const [popoverVisible, setPopoverVisible] = useState({});
   const [secondaryPopoverVisible, setSecondaryPopoverVisible] = useState({});
@@ -26,13 +25,19 @@ const CustomTable = () => {
         "https://666c1ab049dbc5d7145c9d50.mockapi.io/applicants/users"
       );
       const result = await response.json();
-      setData(result);
+      const applications = result.data.applications;
+      console.log(applications);
+      const filteredData = applications.filter(
+        (item) => item.status === status
+      );
+      console.log(filteredData);
+      setData(filteredData);
       setFetching(false);
     } catch (error) {
       console.error("Error fetching data: ", error);
       setFetching(false);
     }
-  }, []);
+  }, [status]);
 
   useEffect(() => {
     fetchData();
@@ -60,55 +65,27 @@ const CustomTable = () => {
   const handleActionClick = (record) => {
     setPopoverContent((prev) => ({
       ...prev,
-      [record.key]: renderPopoverContent(record),
+      [record.id]: renderPopoverContent(record),
     }));
     setPopoverVisible((prev) => ({
       ...prev,
-      [record.key]: true,
+      [record.id]: true,
     }));
   };
 
   const handlePopoverVisibleChange = (visible, record) => {
     setPopoverVisible((prev) => ({
       ...prev,
-      [record.key]: visible,
+      [record.id]: visible,
     }));
   };
 
   const handleSecondaryPopoverVisibleChange = (visible, record) => {
     setSecondaryPopoverVisible((prev) => ({
       ...prev,
-      [record.key]: visible,
+      [record.id]: visible,
     }));
   };
-
-  const popUpArray = [
-    {
-      id: 1,
-      name: "Tahrirlash",
-      icon: <FaUserEdit />,
-      color: "text-red-500",
-    },
-    {
-      id: 2,
-      name: `O'chirish`,
-      icon: <MdDelete />,
-      color: "text-yellow-500",
-    },
-    {
-      id: 3,
-      name: "Holati",
-      icon: <GrStatusCriticalSmall />,
-      color: "text-green-500",
-      hasSecondaryPopover: true,
-    },
-    {
-      id: 4,
-      name: "Ma'lumotlari",
-      icon: <MdInfo />,
-      color: "text-gray-600",
-    },
-  ];
 
   const renderPopoverContent = (record) => (
     <div>
@@ -121,7 +98,7 @@ const CustomTable = () => {
             <Popover
               content={<div>Secondary Popover Content</div>}
               trigger="click"
-              open={secondaryPopoverVisible[record.key]}
+              open={secondaryPopoverVisible[record.id]}
               onOpenChange={(visible) =>
                 handleSecondaryPopoverVisibleChange(visible, record)
               }
@@ -158,12 +135,8 @@ const CustomTable = () => {
     ...(isMdOrLarger
       ? [
           {
-            title: "Work",
-            dataIndex: "work",
-          },
-          {
-            title: "Action",
-            dataIndex: "action",
+            title: "Phone",
+            dataIndex: "phone",
           },
           {
             title: "Status",
@@ -176,9 +149,9 @@ const CustomTable = () => {
       dataIndex: "button",
       render: (_, record) => (
         <Popover
-          content={popoverContent[record.key]}
+          content={popoverContent[record.id]}
           trigger="click"
-          open={popoverVisible[record.key]}
+          open={popoverVisible[record.id]}
           onOpenChange={(visible) =>
             handlePopoverVisibleChange(visible, record)
           }
@@ -208,7 +181,7 @@ const CustomTable = () => {
             rowSelection={rowSelection}
             columns={columns}
             dataSource={data}
-            rowKey="key"
+            rowKey="id" // Ensure that each row has a unique key
           />
         )}
       </div>

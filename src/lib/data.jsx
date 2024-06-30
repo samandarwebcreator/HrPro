@@ -6,6 +6,10 @@ import { SiTestcafe } from "react-icons/si";
 import { IoLogoWechat } from "react-icons/io5";
 import { MdLibraryBooks } from "react-icons/md";
 import { BsFillCollectionFill } from "react-icons/bs";
+import { FaUserEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { GrStatusCriticalSmall } from "react-icons/gr";
+import { MdInfo } from "react-icons/md";
 
 export const menuArray = [
   {
@@ -55,5 +59,33 @@ export const menuArray = [
     icon: <BsFillCollectionFill />,
     name: "Kolleksiya",
     link: "collection",
+  },
+];
+
+export const popUpArray = [
+  {
+    id: 1,
+    name: "Tahrirlash",
+    icon: <FaUserEdit />,
+    color: "text-red-500",
+  },
+  {
+    id: 2,
+    name: `O'chirish`,
+    icon: <MdDelete />,
+    color: "text-yellow-500",
+  },
+  {
+    id: 3,
+    name: "Holati",
+    icon: <GrStatusCriticalSmall />,
+    color: "text-green-500",
+    hasSecondaryPopover: true,
+  },
+  {
+    id: 4,
+    name: "Ma'lumotlari",
+    icon: <MdInfo />,
+    color: "text-gray-600",
   },
 ];
