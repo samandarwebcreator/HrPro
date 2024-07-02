@@ -2,39 +2,44 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Table as AntTable, Spin, Popover } from "antd";
 import { useMediaQuery } from "react-responsive";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { useSelector } from "react-redux";
-import { popUpArray } from "../../../../lib/data";
+import { useDispatch, useSelector } from "react-redux";
+import { popUpArray, statusPopUp } from "../../../../lib/data";
+import { showModal, setSelectedItem } from "../../../../Redux/orderReducer";
+import AcceptChange from "./AcceptChange";
 
 const CustomTable = ({ status }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-
-  console.log(data);
   const [fetching, setFetching] = useState(true);
   const [popoverVisible, setPopoverVisible] = useState({});
   const [secondaryPopoverVisible, setSecondaryPopoverVisible] = useState({});
   const [popoverContent, setPopoverContent] = useState({});
   const searchResult = useSelector((state) => state.orderReducer.searchResult);
+  const dispatch = useDispatch();
+
+  const openStatusModal = (item) => {
+    dispatch(setSelectedItem(item));
+    dispatch(showModal(true));
+  };
 
   const isMdOrLarger = useMediaQuery({ minWidth: 768 });
 
   const fetchData = useCallback(async () => {
+    setFetching(true);
     try {
-      const response = await fetch(
-        "https://666c1ab049dbc5d7145c9d50.mockapi.io/applicants/users"
-      );
+      const response = await fetch("http://localhost:8001/v1/application");
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
       const result = await response.json();
       const applications = result.data.applications;
-      console.log(applications);
       const filteredData = applications.filter(
         (item) => item.status === status
       );
-      console.log(filteredData);
       setData(filteredData);
-      setFetching(false);
     } catch (error) {
       console.error("Error fetching data: ", error);
+    } finally {
       setFetching(false);
     }
   }, [status]);
@@ -44,19 +49,15 @@ const CustomTable = ({ status }) => {
   }, [fetchData]);
 
   useEffect(() => {
-    const filterData = () => {
-      if (searchResult) {
-        const filteredData = data.filter((item) =>
-          item.name.toLowerCase().includes(searchResult.toLowerCase())
-        );
-        setData(filteredData);
-      } else {
-        fetchData();
-      }
-    };
-
-    filterData();
-  }, [searchResult, data, fetchData]);
+    if (searchResult) {
+      const filteredData = data.filter((item) =>
+        item.name.toLowerCase().includes(searchResult.toLowerCase())
+      );
+      setData(filteredData);
+    } else {
+      fetchData();
+    }
+  }, [searchResult, fetchData]);
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -96,7 +97,24 @@ const CustomTable = ({ status }) => {
         >
           {item.hasSecondaryPopover ? (
             <Popover
-              content={<div>Secondary Popover Content</div>}
+              content={
+                <div>
+                  {statusPopUp.map((item) => (
+                    <div key={item.id}>
+                      <button
+                        onClick={() => openStatusModal(record)}
+                        className="flex items-center justify-start gap-2 p-2 hover:bg-popoverHover hover:cursor-pointer rounded-lg"
+                      >
+                        <span className={`text-${item.color}`}>
+                          {item.icon}
+                        </span>
+                        <p>{item.name}</p>
+                      </button>
+                    </div>
+                  ))}
+                  <AcceptChange />
+                </div>
+              }
               trigger="click"
               open={secondaryPopoverVisible[record.id]}
               onOpenChange={(visible) =>
@@ -181,7 +199,7 @@ const CustomTable = ({ status }) => {
             rowSelection={rowSelection}
             columns={columns}
             dataSource={data}
-            rowKey="id" // Ensure that each row has a unique key
+            rowKey="id"
           />
         )}
       </div>

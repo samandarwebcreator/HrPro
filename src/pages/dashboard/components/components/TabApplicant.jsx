@@ -1,9 +1,9 @@
 import React from "react";
 import { AndroidOutlined, AppleOutlined } from "@ant-design/icons";
 import { Tabs } from "antd";
-import CustomTable from "./Table";
 import { useDispatch, useSelector } from "react-redux";
 import { changeTabId } from "../../../../Redux/orderReducer";
+import CustomTable from "./Table";
 
 const TabApplicant = () => {
   const mapArray = [
@@ -21,7 +21,6 @@ const TabApplicant = () => {
     },
   ];
 
-  const tabId = useSelector((state) => state.orderReducer.tabId);
   const dispatch = useDispatch();
 
   const handleChangeTabId = (key) => {

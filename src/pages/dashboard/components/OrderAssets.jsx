@@ -9,7 +9,6 @@ const { Search } = Input;
 export default function OrderAssets() {
   const dispatch = useDispatch();
   const searchResult = useSelector((state) => state.orderReducer.searchResult);
-  console.log(searchResult);
 
   const searchApplicant = (value) => {
     dispatch(searchCandidate(value));

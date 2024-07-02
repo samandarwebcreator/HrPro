@@ -10,6 +10,10 @@ import { FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { GrStatusCriticalSmall } from "react-icons/gr";
 import { MdInfo } from "react-icons/md";
+import { IoNewspaperOutline } from "react-icons/io5";
+import { SiProcessingfoundation } from "react-icons/si";
+import { FaMeetup } from "react-icons/fa";
+import { IoCheckmarkDoneCircle } from "react-icons/io5";
 
 export const menuArray = [
   {
@@ -87,5 +91,36 @@ export const popUpArray = [
     name: "Ma'lumotlari",
     icon: <MdInfo />,
     color: "text-gray-600",
+  },
+];
+
+export const statusPopUp = [
+  {
+    id: 1,
+    status: "New",
+    name: "Statusni yangi arizachiga o'zgartiring!",
+    icon: <IoNewspaperOutline />,
+    color: "purple-700",
+  },
+  {
+    id: 2,
+    status: "Jarayonda",
+    name: "Statusni jarayondagi arizachiga o'zgartiring!",
+    icon: <SiProcessingfoundation />,
+    color: "blue-700",
+  },
+  {
+    id: 3,
+    status: "Uchrashuv",
+    name: "Statusni Uchrashuv belgilashga o'zgartiring!",
+    icon: <FaMeetup />,
+    color: "red-500",
+  },
+  {
+    id: 4,
+    status: "Qabul qilinganlar",
+    name: "Statusni qanbul qilinganlarga o'zgartiring!",
+    icon: <IoCheckmarkDoneCircle />,
+    color: "green-500",
   },
 ];
