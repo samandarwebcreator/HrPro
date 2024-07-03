@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table as AntTable, Spin, Popover } from "antd";
 import { useMediaQuery } from "react-responsive";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -6,21 +6,48 @@ import { useDispatch, useSelector } from "react-redux";
 import { popUpArray } from "../../../../lib/data";
 import PopOver from "./PopOver";
 import useFetch from "../../../../lib/FetchHook";
+import {
+  setInProcess,
+  setNewApplicant,
+  setOnMeeting,
+} from "../../../../Redux/orderReducer";
 
 const CustomTable = ({ status }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [popoverVisible, setPopoverVisible] = useState({});
   const [popoverContent, setPopoverContent] = useState({});
+  const dispatch = useDispatch();
   const searchResult = useSelector((state) => state.orderReducer.searchResult);
+  const newApplicants = useSelector(
+    (state) => state.orderReducer.newApplicants
+  );
+  const inProcess = useSelector((state) => state.orderReducer.inProcess);
+  const onMeeting = useSelector((state) => state.orderReducer.onMeeting);
+  console.log("NewAppliccants:", newApplicants);
+  console.log("InProcess:", inProcess);
+  console.log("OnMeeting:", onMeeting);
+
   const isMdOrLarger = useMediaQuery({ minWidth: 768 });
 
   const { data, loading, error } = useFetch(
     "http://localhost:8001/v1/application"
   );
 
-  console.log("Loading:", loading);
-  console.log("Error:", error);
-  console.log("Data:", data);
+  // Dispatch actions based on initial data load
+  useEffect(() => {
+    if (data) {
+      data.data.applications.forEach((item) => {
+        const { status } = item;
+        if (status === "new") {
+          dispatch(setNewApplicant(item));
+        } else if (status === "jarayonda") {
+          dispatch(setInProcess(item));
+        } else if (status === "uchrashuv") {
+          dispatch(setOnMeeting(item));
+        }
+      });
+    }
+  }, [data, dispatch]);
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -69,6 +96,13 @@ const CustomTable = ({ status }) => {
     onChange: onSelectChange,
   };
 
+  if (loading) {
+    return <Spin />;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
   const columns = [
     {
       title: "Name",
@@ -113,21 +147,13 @@ const CustomTable = ({ status }) => {
     },
   ];
 
-  if (loading) {
-    return <Spin />;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
   return (
     <div>
       <div className="rounded-lg bg-white mt-4">
         <AntTable
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={data?.data?.applications || []}
+          dataSource={data?.data?.applications || []} // Ensure data is not null
           rowKey="id"
         />
       </div>

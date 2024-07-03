@@ -7,6 +7,9 @@ const orderReducer = createSlice({
     tabId: 1,
     isAcceptModalOpen: false,
     selectedItem: null,
+    newApplicants: [],
+    inProcess: [],
+    onMeeting: [],
   },
   reducers: {
     searchCandidate: (state, action) => {
@@ -17,6 +20,15 @@ const orderReducer = createSlice({
     },
     showModal: (state, action) => {
       state.isAcceptModalOpen = action.payload;
+    },
+    setNewApplicant: (state, action) => {
+      state.newApplicants = action.payload;
+    },
+    setInProcess: (state, action) => {
+      state.inProcess = action.payload;
+    },
+    setOnMeeting: (state, action) => {
+      state.onMeeting = action.payload;
     },
     setSelectedItem: (state, action) => {
       state.selectedItem = action.payload;
@@ -37,5 +49,8 @@ export const {
   showModal,
   setSelectedItem,
   updateStatus,
+  setNewApplicant,
+  setInProcess,
+  setOnMeeting,
 } = orderReducer.actions;
 export default orderReducer.reducer;
