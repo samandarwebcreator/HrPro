@@ -6,7 +6,7 @@ const orderReducer = createSlice({
     searchResult: "",
     tabId: 1,
     isAcceptModalOpen: false,
-    selectedItem: null, // Track selected item to update
+    selectedItem: null,
   },
   reducers: {
     searchCandidate: (state, action) => {

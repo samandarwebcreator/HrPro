@@ -1,11 +1,7 @@
 import React from "react";
 import { Modal, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  showModal,
-  updateStatus,
-  setSelectedItem,
-} from "../../../../Redux/orderReducer";
+import { showModal, updateStatus } from "../../../../Redux/orderReducer";
 
 const AcceptChange = () => {
   const isAcceptModalOpen = useSelector(
@@ -26,7 +22,7 @@ const AcceptChange = () => {
   return (
     <Modal
       title="Confirmation"
-      visible={isAcceptModalOpen}
+      open={isAcceptModalOpen}
       onOk={handleOk}
       onCancel={handleCancel}
       footer={[
