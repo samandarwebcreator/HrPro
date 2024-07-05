@@ -22,13 +22,13 @@ const orderReducer = createSlice({
       state.isAcceptModalOpen = action.payload;
     },
     setNewApplicant: (state, action) => {
-      state.newApplicants = action.payload;
+      state.newApplicants = [...state.newApplicants, ...action.payload];
     },
     setInProcess: (state, action) => {
-      state.inProcess = action.payload;
+      state.inProcess = [...state.inProcess, ...action.payload];
     },
     setOnMeeting: (state, action) => {
-      state.onMeeting = action.payload;
+      state.onMeeting = [...state.onMeeting, ...action.payload];
     },
     setSelectedItem: (state, action) => {
       state.selectedItem = action.payload;

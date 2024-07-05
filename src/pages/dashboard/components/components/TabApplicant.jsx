@@ -1,7 +1,7 @@
 import React from "react";
 import { AndroidOutlined, AppleOutlined } from "@ant-design/icons";
 import { Tabs } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { changeTabId } from "../../../../Redux/orderReducer";
 import CustomTable from "./Table";
 
@@ -9,15 +9,21 @@ const TabApplicant = () => {
   const mapArray = [
     {
       id: 1,
-      status: "New",
+      status: "new",
       icon: AppleOutlined,
       tabName: "Arizachilar",
     },
     {
       id: 2,
-      status: "Jarayonda",
+      status: "jarayonda",
       icon: AndroidOutlined,
       tabName: "Jarayondagilar",
+    },
+    {
+      id: 3,
+      status: "uchrashuv",
+      icon: AndroidOutlined,
+      tabName: "Uchrashuv",
     },
   ];
 

@@ -17,15 +17,11 @@ const CustomTable = ({ status }) => {
   const [popoverVisible, setPopoverVisible] = useState({});
   const [popoverContent, setPopoverContent] = useState({});
   const dispatch = useDispatch();
-  const searchResult = useSelector((state) => state.orderReducer.searchResult);
   const newApplicants = useSelector(
     (state) => state.orderReducer.newApplicants
   );
   const inProcess = useSelector((state) => state.orderReducer.inProcess);
   const onMeeting = useSelector((state) => state.orderReducer.onMeeting);
-  console.log("NewAppliccants:", newApplicants);
-  console.log("InProcess:", inProcess);
-  console.log("OnMeeting:", onMeeting);
 
   const isMdOrLarger = useMediaQuery({ minWidth: 768 });
 
@@ -33,19 +29,30 @@ const CustomTable = ({ status }) => {
     "http://localhost:8001/v1/application"
   );
 
-  // Dispatch actions based on initial data load
   useEffect(() => {
     if (data) {
+      const newApplicants = [];
+      const inProcess = [];
+      const onMeeting = [];
+
       data.data.applications.forEach((item) => {
         const { status } = item;
-        if (status === "new") {
-          dispatch(setNewApplicant(item));
-        } else if (status === "jarayonda") {
-          dispatch(setInProcess(item));
+        if (status === "New") {
+          newApplicants.push(item);
+        } else if (status === "Jarayonda") {
+          inProcess.push(item);
         } else if (status === "uchrashuv") {
-          dispatch(setOnMeeting(item));
+          onMeeting.push(item);
         }
       });
+
+      console.log("New Applicants: ", newApplicants);
+      console.log("In Process: ", inProcess);
+      console.log("On Meeting: ", onMeeting);
+
+      dispatch(setNewApplicant(newApplicants));
+      dispatch(setInProcess(inProcess));
+      dispatch(setOnMeeting(onMeeting));
     }
   }, [data, dispatch]);
 
@@ -103,6 +110,18 @@ const CustomTable = ({ status }) => {
   if (error) {
     return <p>Error: {error}</p>;
   }
+
+  let dataSource = [];
+  if (status === "new") {
+    dataSource = newApplicants;
+  } else if (status === "jarayonda") {
+    dataSource = inProcess;
+  } else if (status === "uchrashuv") {
+    dataSource = onMeeting;
+  }
+
+  console.log("DataSource:", dataSource);
+
   const columns = [
     {
       title: "Name",
@@ -153,8 +172,11 @@ const CustomTable = ({ status }) => {
         <AntTable
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={data?.data?.applications || []} // Ensure data is not null
-          rowKey="id"
+          dataSource={dataSource.map((item) => ({
+            ...item,
+            key: item.id,
+          }))}
+          rowKey="key"
         />
       </div>
     </div>
