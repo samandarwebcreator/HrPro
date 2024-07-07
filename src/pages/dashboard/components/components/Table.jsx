@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Table as AntTable, Spin, Popover } from "antd";
 import { useMediaQuery } from "react-responsive";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -29,8 +29,8 @@ const CustomTable = ({ status }) => {
     "http://localhost:8001/v1/application"
   );
 
-  useEffect(() => {
-    if (data) {
+  const updateDataState = useCallback(
+    (data) => {
       const newApplicants = [];
       const inProcess = [];
       const onMeeting = [];
@@ -46,15 +46,18 @@ const CustomTable = ({ status }) => {
         }
       });
 
-      console.log("New Applicants: ", newApplicants);
-      console.log("In Process: ", inProcess);
-      console.log("On Meeting: ", onMeeting);
-
       dispatch(setNewApplicant(newApplicants));
       dispatch(setInProcess(inProcess));
       dispatch(setOnMeeting(onMeeting));
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    if (data) {
+      updateDataState(data);
     }
-  }, [data, dispatch]);
+  }, [data, updateDataState]);
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -120,6 +123,11 @@ const CustomTable = ({ status }) => {
     dataSource = onMeeting;
   }
 
+  dataSource = dataSource.map((item) => ({
+    ...item,
+    key: item.id,
+  }));
+
   console.log("DataSource:", dataSource);
 
   const columns = [
@@ -172,10 +180,7 @@ const CustomTable = ({ status }) => {
         <AntTable
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={dataSource.map((item) => ({
-            ...item,
-            key: item.id,
-          }))}
+          dataSource={dataSource}
           rowKey="key"
         />
       </div>
